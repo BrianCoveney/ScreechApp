@@ -10,6 +10,7 @@ public class ScreechBean {
     private String carName;
     private int numSkidMarks = 0;
     private String numericRegex = "\\d+";
+    private String stringRegex = "^[A-Za-z, ]++$";
     private String errorMessage = "";
 
 
@@ -18,7 +19,7 @@ public class ScreechBean {
 
 
     public ScreechBean(String carName, int numSkidMarks) {
-        this.carName = carName;
+        setCarName(carName);
         setNumSkidMarks(numSkidMarks);
     }
 
@@ -30,7 +31,7 @@ public class ScreechBean {
     public void setCarName(String carName) { this.carName = carName; }
 
     public void setNumSkidMarks(int numSkidMarks) {
-        validateSkidMarks();
+
         this.numSkidMarks = numSkidMarks;
     }
 
@@ -47,15 +48,23 @@ public class ScreechBean {
     }
 
 
-    public boolean validateSkidMarks() {
-        String skidMarks = String.valueOf(this.numSkidMarks);
-        if(!skidMarks.equals(numericRegex)) {
-            errorMessage = "Number of skid marks must be numeric";
-            return false;
+    public boolean validateCarName() {
+        if(this.carName.matches(stringRegex)) {
+            return true;
         }
-        return true;
+        return false;
     }
 
+
+    public boolean validateNumberSkidMarks() {
+
+        Integer integer = Integer.valueOf(this.numSkidMarks);
+
+        if(integer == (int) integer) {
+            return true;
+        }
+        return false;
+    }
 
     public String getMessage() {
         return errorMessage;

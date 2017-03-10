@@ -23,7 +23,7 @@
             min-width: 150px;
         }
 
-        input {
+        input, span {
             margin-left: 20px;
         }
     </style>
@@ -31,15 +31,18 @@
 </head>
 <form method="get" action="ScreechServlet" method="post">
 
+    <input type="hidden" name="from" value="${pageContext.request.requestURI}" />
+
     <strong class="test">Calculate speed of your car from it's skid marks<br>
     </strong><br>
 
 
     <label>Enter name of car:</label><br>
-    <input type="text" name="skidlength"><br>
+    <input type="text" name="carname"><span style="color: #FF0000;">${errorMsg}</span><br>
+
 
     <label>Enter Number of skid marks:</label><br>
-    <input type="text" name="skidmark">
+    <input type="number" min="1" max="4" value="1" name="skidmarks"><br>
 
     <div>
         <label>Skidmark Length No. 1:</label>
@@ -64,7 +67,6 @@
     <input type="reset" name="reset" value="Reset">
 
 </form>
-
 
 </body>
 </html>

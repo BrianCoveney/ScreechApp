@@ -51,6 +51,7 @@ public class ScreechServlet extends HttpServlet {
 
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
     }
 
 
@@ -58,7 +59,7 @@ public class ScreechServlet extends HttpServlet {
 
         // set vars equal to form parameters
         carName = request.getParameter("carname");
-        numOfSkidMarks = Integer.parseInt(request.getParameter("skidmark"));
+        numOfSkidMarks = Integer.parseInt(request.getParameter("skidmarks"));
         skidLen1 = Double.parseDouble(request.getParameter("skidmarklength1"));
         skidLen2 = Double.parseDouble(request.getParameter("skidmarklength2"));
         skidLen3 = Double.parseDouble(request.getParameter("skidmarklength3"));
@@ -66,12 +67,20 @@ public class ScreechServlet extends HttpServlet {
         surfaceType = request.getParameter("surface");
 
 
+
         ScreechBean screechBean = new ScreechBean(carName, numOfSkidMarks);
 
-        if(!screechBean.validateSkidMarks()) {
-            request.setAttribute("error_message", screechBean.getMessage());
-
+        /*** Validating that car name is a string ***/
+        //if car name is a string - remove the errorMessage on page load, and after user corrects input value
+        if (screechBean.validateCarName()) {
+            request.getSession().removeAttribute("errorMsg");
+        } else {
+            // set error message
+            request.getSession().setAttribute("errorMsg", "Please check you car name entry");
+            // redirect to
+            response.sendRedirect(request.getParameter("from"));
         }
+
 
         // set variable equal to the return from the method No. 1 calculateAverageSkidDistance()
         double avgSkidLength = calculateAverageSkidDistance(numOfSkidMarks, skidLen1, skidLen2, skidLen3, skidLen4);

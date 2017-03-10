@@ -9,7 +9,8 @@
 <p>Sorry, an error occurred.</p>
 <p>Here is the exception stack trace: </p>
 <pre>
- ERRRRRROR
+<%= request.getAttribute("message") %>
+
 </pre>
 
 </body>
