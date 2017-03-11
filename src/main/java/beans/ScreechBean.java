@@ -5,24 +5,37 @@ package beans;
  */
 public class ScreechBean {
 
-    // encapsulate properties / attributes of the class
-    private String title = "to be changed";
+    // properties
     private String carName;
     private int numSkidMarks = 0;
+    private double skidMark1;
+    private double skidMark2;
+    private double skidMark3;
+    private double skidMark4;
+    private String surfaceType;
+
+
+    private String title = "to be changed";
     private String numericRegex = "\\d+";
     private String stringRegex = "^[A-Za-z, ]++$";
     private String errorMessage = "";
+
 
 
     /*** no arg constructor is required ***/
     public ScreechBean() {  }
 
 
-    public ScreechBean(String carName, int numSkidMarks) {
-        setCarName(carName);
-        setNumSkidMarks(numSkidMarks);
+    public ScreechBean(String carName, int numSkidMarks, double skidMark1, double skidMark2, double skidMark3,
+                       double skidMark4, String surfaceType) {
+        this.carName = carName;
+        this.numSkidMarks = numSkidMarks;
+        this.skidMark1 = skidMark1;
+        this.skidMark2 = skidMark2;
+        this.skidMark3 = skidMark3;
+        this.skidMark4 = skidMark4;
+        this.surfaceType = surfaceType;
     }
-
 
     // accessor method - allow the client to retrieve the state of the object
     public String getCarName() { return carName; }
@@ -31,7 +44,6 @@ public class ScreechBean {
     public void setCarName(String carName) { this.carName = carName; }
 
     public void setNumSkidMarks(int numSkidMarks) {
-
         this.numSkidMarks = numSkidMarks;
     }
 
@@ -47,6 +59,47 @@ public class ScreechBean {
         this.title = title;
     }
 
+    public double getSkidMark1() {
+        return skidMark1;
+    }
+
+    public void setSkidMark1(double skidMark1) {
+        this.skidMark1 = skidMark1;
+    }
+
+    public double getSkidMark2() {
+        return skidMark2;
+    }
+
+    public void setSkidMark2(double skidMark2) {
+        this.skidMark2 = skidMark2;
+    }
+
+    public double getSkidMark3() {
+        return skidMark3;
+    }
+
+    public void setSkidMark3(double skidMark3) {
+        this.skidMark3 = skidMark3;
+    }
+
+    public double getSkidMark4() {
+        return skidMark4;
+    }
+
+    public void setSkidMark4(double skidMark4) {
+        this.skidMark4 = skidMark4;
+    }
+
+    public String getSurfaceType() {
+        return surfaceType;
+    }
+
+    public void setSurfaceType(String surfaceType) {
+        this.surfaceType = surfaceType;
+    }
+
+
 
     public boolean validateCarName() {
         if(this.carName.matches(stringRegex)) {
@@ -56,19 +109,11 @@ public class ScreechBean {
     }
 
 
-    public boolean validateNumberSkidMarks() {
 
-        Integer integer = Integer.valueOf(this.numSkidMarks);
 
-        if(integer > 4) {
-            return false;
-        }
-        return true;
-    }
 
-    public String getMessage() {
-        return errorMessage;
-    }
+
+
 
 
 

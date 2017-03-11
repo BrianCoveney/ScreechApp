@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 /*
     COMP8007 OO Server Side Programming
@@ -35,7 +36,7 @@ public class ScreechServlet extends HttpServlet {
     // a constant value used in this equation.
     private static final int EQUATION_CONST = 30;
     // array of road surface types
-    private String surfaceTypes[] = { "Cement", "Asphalt", "Gravel", "Ice", "Snow" };
+    private String surfaceTypes[] = {"Cement", "Asphalt", "Gravel", "Ice", "Snow"};
     private String carName;
     private double skidLen1, skidLen2, skidLen3, skidLen4;
     private int numOfSkidMarks;
@@ -43,6 +44,7 @@ public class ScreechServlet extends HttpServlet {
     private String surfaceType;
     private double breakingEfficiency;
     private double dragFactor;
+    private ScreechBean screechBean;
 
 
     public ScreechServlet() {
@@ -67,25 +69,42 @@ public class ScreechServlet extends HttpServlet {
         surfaceType = request.getParameter("surface");
 
 
-
-        ScreechBean screechBean = new ScreechBean(carName, numOfSkidMarks);
+        screechBean = new ScreechBean(
+                carName, numOfSkidMarks, skidLen1, skidLen2, skidLen3, skidLen4, surfaceType);
 
         /*** Validating that car name is a string ***/
         //if car name is a string - remove the errorMessage on page load, and after user corrects input value
         if (screechBean.validateCarName()) {
             request.getSession().removeAttribute("errorMsg");
-
-
         } else {
             // set error message
             request.getSession().setAttribute("errorMsg", "Please check you car name entry");
-            // redirect to
-//            response.sendRedirect(request.getParameter("from"));
 
-            request.getRequestDispatcher("/index.jsp").forward(request, response);
-
-
+            // redirect to index.jsp
+            request.getRequestDispatcher("/error.jsp").forward(request, response);
         }
+
+
+        ArrayList<Double> skidList = new ArrayList<>();
+        skidList.add(skidLen1);
+        skidList.add(skidLen2);
+        skidList.add(skidLen3);
+        skidList.add(skidLen4);
+
+        int i = 1;
+        for(Double skidLength : skidList) {
+            if(skidLength > 0 && skidLength <= 4) {
+                request.getSession().removeAttribute("errorMsgSkid" + i);
+                System.out.println("errorMsgSkid" + i);
+            } else {
+                // set error message
+                request.getSession().setAttribute("errorMsgSkid" + i, "Please check your skid length entry");
+                // redirect to index.jsp
+                request.getRequestDispatcher("/error.jsp").forward(request, response);
+            }
+            i++;
+        }
+
 
 
 
@@ -111,7 +130,6 @@ public class ScreechServlet extends HttpServlet {
     }
 
 
-
     // calculate the average skid distance
     public double calculateAverageSkidDistance(int numberOfSkidMarks, double sk1, double sk2, double sk3, double sk4) {
         return averageSkidLength = (sk1 + sk2 + sk3 + sk4) / numberOfSkidMarks;
@@ -120,15 +138,15 @@ public class ScreechServlet extends HttpServlet {
 
     // set value based on checkbox selection
     public double setDragFactor(String choice) {
-        if(choice.equals("Cement")) {
+        if (choice.equals("Cement")) {
             dragFactor = 0.75;
-        } else if(choice.equals("Asphalt")) {
+        } else if (choice.equals("Asphalt")) {
             dragFactor = 0.9;
-        } else if(choice.equals("Gravel")) {
+        } else if (choice.equals("Gravel")) {
             dragFactor = 0.8;
-        } else if(choice.equals("Snow")) {
+        } else if (choice.equals("Snow")) {
             dragFactor = 0.25;
-        } else if(choice.equals("Ice")) {
+        } else if (choice.equals("Ice")) {
             dragFactor = 0.55;
         }
         return dragFactor;
@@ -137,13 +155,13 @@ public class ScreechServlet extends HttpServlet {
 
     // calculate breaking efficiency based on number of skid marks
     public double calculateBreakingEfficiency(int numberOfSkidMarks) {
-        if(numberOfSkidMarks == 4) {
+        if (numberOfSkidMarks == 4) {
             breakingEfficiency = 1.0;
-        } else if(numberOfSkidMarks == 3) {
+        } else if (numberOfSkidMarks == 3) {
             breakingEfficiency = 0.7;
-        } else if(numberOfSkidMarks == 2) {
+        } else if (numberOfSkidMarks == 2) {
             breakingEfficiency = 0.6;
-        } else if(numberOfSkidMarks == 1) {
+        } else if (numberOfSkidMarks == 1) {
             breakingEfficiency = 0.3;
         }
         return breakingEfficiency;
@@ -170,7 +188,7 @@ public class ScreechServlet extends HttpServlet {
         stringBuff.append("<h3>Base on your figures, the skid details for the " + carName + " are:</h3>\n");
         stringBuff.append("<table>");
         stringBuff.append("<tr><th>Avg skid distance</th><th>Surface type</th><th>Calculated Speed</th></tr>");
-        stringBuff.append("<tr><td>"+averageSkidLength+"feet</td><td>"+sur+"</td><td>"+res+"mph</td></tr>");
+        stringBuff.append("<tr><td>" + averageSkidLength + "feet</td><td>" + sur + "</td><td>" + res + "mph</td></tr>");
         stringBuff.append("<table>");
         stringBuff.append("</body></html>");
         return stringBuff;
