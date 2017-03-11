@@ -8,65 +8,43 @@
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
     <title>Screech</title>
 
-    <style type="text/css">
-
-        * {
-            margin-bottom: 10px;
-        }
-
-        .submit_btn{
-            margin-right: 30px;
-        }
-
-        .skid_lenghts{
-            display: block;
-            min-width: 150px;
-        }
-
-        input, span {
-            margin-left: 20px;
-        }
-    </style>
+    <%-- 1/5 Implicit object:
+    'pageContext' provides access to the request object, which recives the contextPath  --%>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/stylesheet.css">
 
 </head>
 <form method="get" action="ScreechServlet" method="post">
-
-    <input type="hidden" name="from" value="${pageContext.request.requestURI}" />
-
-    <strong class="test">Calculate speed of your car from it's skid marks<br>
-    </strong><br>
-
-
-    <label>Enter name of car:</label><br>
-    <input type="text" name="carname"><span style="color: #FF0000;">${errorMsg}</span><br>
-
-
-    <label>Enter Number of skid marks:</label><br>
-    <input type="number" min="1" max="4" value="1" name="skidmarks"><br>
-
-    <div>
-        <label>Skidmark Length No. 1:</label>
-        <input type="number" min="0" max="100" step="0.5" value="0" name="skidmarklength1" class="skid_lenghts">
-        <label>Skidmark Length No. 2:</label>
-        <input type="number" min="0" max="100" step="0.5" value="0" name="skidmarklength2" class="skid_lenghts">
-        <label>Skidmark Length No. 3:</label>
-        <input type="number" min="0" max="100" step="0.5" value="0" name="skidmarklength3" class="skid_lenghts">
-        <label>Skidmark Length No. 4:</label>
-        <input type="number" min="0" max="100" step="0.5" value="0" name="skidmarklength4" class="skid_lenghts">
-    </div>
-
-    <label>Enter type of road surface:</label><br>
-    <input type="radio" name="surface" value="Cement">Portland Cement<br>
-    <input type="radio" name="surface" value="Asphalt">Asphalt<br>
-    <input type="radio" name="surface" value="Gravel">Gravel<br>
-    <input type="radio" name="surface" value="Ice">Ice<br>
-    <input type="radio" name="surface" value="Snow">Snow<br>
-
-
-    <input class="submit_btn" type="submit" name="submit" value="Submit">
-    <input type="reset" name="reset" value="Reset">
-
+    <input type="hidden" name="from" value="${pageContext.request.requestURI}"/>
+    <fieldset>
+        <p class="text">Calculate speed of your car from it's skid marks</p>
+    </fieldset>
+    <fieldset>
+    <label class="carname_lable">Name of car:</label>
+        <input type="text" name="carname"><span>${errorMsg}</span><br>
+        <label>Number of skid marks:</label>
+        <input type="number" min="1" max="4" value="1" name="skidmarks" class="skid_marks"><span
+            style="color: #FF0000;">${errorMsgSkid}</span><br>
+        <div>
+            <label>Skidmark length no. 1:</label>
+            <input type="number" min="0" max="100" step="0.5" value="0" name="skidmarklength1" class="skid_lenghts one"><br>
+            <label>Skidmark length no. 2:</label>
+            <input type="number" min="0" max="100" step="0.5" value="0" name="skidmarklength2" class="skid_lenghts"><br>
+            <label>Skidmark length no. 3:</label>
+            <input type="number" min="0" max="100" step="0.5" value="0" name="skidmarklength3" class="skid_lenghts"><br>
+            <label>Skidmark length no. 4:</label>
+            <input type="number" min="0" max="100" step="0.5" value="0" name="skidmarklength4" class="skid_lenghts"><br>
+        </div>
+        <label>Enter type of road surface:</label><br>
+        <input type="radio" name="surface" value="Cement" class="radio_btn" checked>Portland Cement<br>
+        <input type="radio" name="surface" value="Asphalt" class="radio_btn">Asphalt<br>
+        <input type="radio" name="surface" value="Gravel" class="radio_btn">Gravel<br>
+        <input type="radio" name="surface" value="Ice" class="radio_btn">Ice<br>
+        <input type="radio" name="surface" value="Snow" class="radio_btn">Snow<br>
+    </fieldset>
+    <fieldset>
+        <input class="submit_btn" type="submit" name="submit" value="Submit">
+        <input class="reset_btn" type="reset" name="reset" value="Reset">
+    </fieldset>
 </form>
-
 </body>
 </html>

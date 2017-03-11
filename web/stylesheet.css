@@ -1,0 +1,52 @@
+* {
+    margin-bottom: 10px;
+}
+
+body {
+    background-color: cadetblue
+}
+
+p.text{
+    margin-top: 25px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.submit_btn {
+    margin-right: 150px;
+    margin-left: 100px;
+}
+
+.submit_btn, .reset_btn{
+    margin-top: 30px;
+}
+
+.skid_lenghts, .skid_marks {
+    min-width: 150px;
+}
+
+.carname_lable {
+    margin-right: 63px;
+}
+
+.skid_lenghts {
+    margin-right: -5px;
+}
+
+
+.radio_btn {
+    margin-left: 180px;
+}
+
+input {
+    margin-left: 30px;
+}
+
+span {
+    margin-left: 10px;
+    color: #FF0000;
+}
+
+fieldset {
+    max-width:700px;
+}

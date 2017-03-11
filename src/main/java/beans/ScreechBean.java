@@ -60,10 +60,10 @@ public class ScreechBean {
 
         Integer integer = Integer.valueOf(this.numSkidMarks);
 
-        if(integer == (int) integer) {
-            return true;
+        if(integer > 4) {
+            return false;
         }
-        return false;
+        return true;
     }
 
     public String getMessage() {

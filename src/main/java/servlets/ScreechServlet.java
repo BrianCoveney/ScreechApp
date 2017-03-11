@@ -74,12 +74,19 @@ public class ScreechServlet extends HttpServlet {
         //if car name is a string - remove the errorMessage on page load, and after user corrects input value
         if (screechBean.validateCarName()) {
             request.getSession().removeAttribute("errorMsg");
+
+
         } else {
             // set error message
             request.getSession().setAttribute("errorMsg", "Please check you car name entry");
             // redirect to
-            response.sendRedirect(request.getParameter("from"));
+//            response.sendRedirect(request.getParameter("from"));
+
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
+
+
         }
+
 
 
         // set variable equal to the return from the method No. 1 calculateAverageSkidDistance()
@@ -157,16 +164,14 @@ public class ScreechServlet extends HttpServlet {
         StringBuffer stringBuff = new StringBuffer();
         stringBuff.append("<html><head>\n");
         stringBuff.append("<title>Screech GET Result</title>\n");
+        stringBuff.append("<style> table, th, td { border: 1px solid black; border-collapse: collapse; } th, tr,td { padding: 10px; }</style>");
         stringBuff.append("</head><body>\n");
         stringBuff.append("<jsp:getProperty name='ScreechBean' property='skidMarks'/>");
-        stringBuff.append("<h3>Base on your figures, the " + carName + " details are:</h3>\n");
-        stringBuff.append("<h3>Skid mark 1: " + sm1 + "feet</h3>");
-        stringBuff.append("<h3>Skid mark 2: " + sm2 + "feet</h3>");
-        stringBuff.append("<h3>Skid mark 3: " + sm3 + "feet</h3>");
-        stringBuff.append("<h3>Skid mark 4: " + sm4 + "feet</h3>");
-        stringBuff.append("<h3>Avg skid distance: " + averageSkidLength + "feet</h3>");
-        stringBuff.append("<h3>Surface type: " + sur + "</h3>");
-        stringBuff.append("<h3>Calculated Speed: " + res + "mph</h3>");
+        stringBuff.append("<h3>Base on your figures, the skid details for the " + carName + " are:</h3>\n");
+        stringBuff.append("<table>");
+        stringBuff.append("<tr><th>Avg skid distance</th><th>Surface type</th><th>Calculated Speed</th></tr>");
+        stringBuff.append("<tr><td>"+averageSkidLength+"feet</td><td>"+sur+"</td><td>"+res+"mph</td></tr>");
+        stringBuff.append("<table>");
         stringBuff.append("</body></html>");
         return stringBuff;
     }
