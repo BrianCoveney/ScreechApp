@@ -3,7 +3,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-    <jsp:useBean id="ScreechBean" scope="session" class="beans.ScreechBean"/>
+    <jsp:useBean id="ScreechBean" scope="session" class="beans.CarBean"/>
     <jsp:setProperty name="ScreechBean" property="*"/>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
     <title>Screech</title>
@@ -20,23 +20,28 @@
     </fieldset>
     <fieldset>
         <label class="carname_lable">Name of car:</label>
+
+        <%-- For each form input we use request.getParameter(...) to retrieve and display the user input value from index.jsp  --%>
         <input type="text" name="carname" value="<%= request.getParameter("carname") %>"><span>${errorMsg}</span><br>
         <label>Number of skid marks:</label>
-        <input type="number" min="1" max="4" value="<%= request.getParameter("skidmarks") %>" name="skidmarks" class="skid_marks"><span
-            style="color: #FF0000;"><span>${errorMsg2}</span></span><br>
+        <input type="text" value="<%= request.getParameter("skidmarks") %>" name="skidmarks" class="skid_marks">
+        <span>${errorMsg2}</span><span>${message}</span><br>
         <div>
             <label>Skidmark length no. 1:</label>
-            <input type="number" min="0" max="100" step="0.5" name="skidmarklength1" value="<%= request.getParameter("skidmarklength1") %>"  class="skid_lenghts one">
-            <span>${errorMsgSkid1}</span><br>
+            <input type="text" name="skidmarklength1" value="<%= request.getParameter("skidmarklength1") %>"  class="skid_lenghts one">
+            <span>${errorMsgSkid1}</span><span>${errorMsg2Skid0}</span><br>
+
             <label>Skidmark length no. 2:</label>
-            <input type="number" min="0" max="100" step="0.5" value="0" name="skidmarklength2" value="<%= request.getParameter("skidmarklength2") %>"  class="skid_lenghts">
-            <span>${errorMsgSkid2}</span><br>
+            <input type="text" name="skidmarklength2" value="<%= request.getParameter("skidmarklength2") %>"  class="skid_lenghts">
+            <span>${errorMsgSkid2}</span><span>${errorMsg2Skid1}</span><br>
+
             <label>Skidmark length no. 3:</label>
-            <input type="number" min="0" max="100" step="0.5" value="0" name="skidmarklength3" value="<%= request.getParameter("skidmarklength3") %>"  class="skid_lenghts">
-            <span>${errorMsgSkid3}</span><br>
+            <input type="text" name="skidmarklength3" value="<%= request.getParameter("skidmarklength3") %>"  class="skid_lenghts">
+            <span>${errorMsgSkid3}</span><span>${errorMsg2Skid2}</span><br>
+
             <label>Skidmark length no. 4:</label>
-            <input type="number" min="0" max="100" step="0.5" value="0" name="skidmarklength4" value="<%= request.getParameter("skidmarklength4") %>"  class="skid_lenghts">
-            <span>${errorMsgSkid4}</span><br>
+            <input type="text"  name="skidmarklength4" value="<%= request.getParameter("skidmarklength4") %>"  class="skid_lenghts">
+            <span>${errorMsgSkid4}</span><span>${errorMsg2Skid3}</span><br>
         </div>
         <label>Enter type of road surface:</label><br>
         <input type="radio" name="surface" value="Cement" class="radio_btn" checked>Portland Cement<br>
