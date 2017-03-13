@@ -1,6 +1,7 @@
-package servlets;
+package controller;
 
-import beans.CarBean;
+import model.CarBean;
+import model.Surface;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -138,6 +139,9 @@ public class ScreechServlet extends HttpServlet {
         // drag factor
         double dragFactor = setDragFactor(surfaceType);
 
+
+
+
         // breaking efficiency
         double breakEff = calculateBreakingEfficiency(numOfSkidMarks);
 
@@ -154,26 +158,26 @@ public class ScreechServlet extends HttpServlet {
     }
 
 
-    // calculate the average skid distance
-    public double calculateAverageSkidDistance(int numberOfSkidMarks, double sk1, double sk2, double sk3, double sk4) {
-        return averageSkidLength = (sk1 + sk2 + sk3 + sk4) / numberOfSkidMarks;
-    }
-
-
     // set value based on checkbox selection
     public double setDragFactor(String choice) {
         if (choice.equals("Cement")) {
-            dragFactor = 0.75;
+            dragFactor = Surface.CEMENT.setDragFactor(dragFactor);
         } else if (choice.equals("Asphalt")) {
-            dragFactor = 0.9;
+            dragFactor = Surface.ASPHALT.setDragFactor(dragFactor);
         } else if (choice.equals("Gravel")) {
-            dragFactor = 0.8;
+            dragFactor = Surface.GRAVEL.setDragFactor(dragFactor);
         } else if (choice.equals("Snow")) {
-            dragFactor = 0.25;
+            dragFactor = Surface.SNOW.setDragFactor(dragFactor);
         } else if (choice.equals("Ice")) {
-            dragFactor = 0.55;
+            dragFactor = Surface.ICE.setDragFactor(dragFactor);
         }
         return dragFactor;
+    }
+
+
+    // calculate the average skid distance
+    public double calculateAverageSkidDistance(int numberOfSkidMarks, double sk1, double sk2, double sk3, double sk4) {
+        return averageSkidLength = (sk1 + sk2 + sk3 + sk4) / numberOfSkidMarks;
     }
 
 
