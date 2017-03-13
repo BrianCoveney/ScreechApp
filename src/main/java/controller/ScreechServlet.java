@@ -142,6 +142,7 @@ public class ScreechServlet extends HttpServlet {
 
 
 
+
         // breaking efficiency
         double breakEff = calculateBreakingEfficiency(numOfSkidMarks);
 
@@ -160,15 +161,19 @@ public class ScreechServlet extends HttpServlet {
 
     // set value based on checkbox selection
     public double setDragFactor(String choice) {
-        if (choice.equals("Cement")) {
+        if (choice.equalsIgnoreCase(Surface.CEMENT.toString())){
             dragFactor = Surface.CEMENT.setDragFactor(dragFactor);
-        } else if (choice.equals("Asphalt")) {
+        }
+        else if (choice.equalsIgnoreCase(Surface.ASPHALT.toString())) {
             dragFactor = Surface.ASPHALT.setDragFactor(dragFactor);
-        } else if (choice.equals("Gravel")) {
+        }
+        else if (choice.equalsIgnoreCase(Surface.GRAVEL.toString())) {
             dragFactor = Surface.GRAVEL.setDragFactor(dragFactor);
-        } else if (choice.equals("Snow")) {
+        }
+        else if (choice.equalsIgnoreCase(Surface.SNOW.toString())) {
             dragFactor = Surface.SNOW.setDragFactor(dragFactor);
-        } else if (choice.equals("Ice")) {
+        }
+        else if (choice.equalsIgnoreCase(Surface.ICE.toString())) {
             dragFactor = Surface.ICE.setDragFactor(dragFactor);
         }
         return dragFactor;

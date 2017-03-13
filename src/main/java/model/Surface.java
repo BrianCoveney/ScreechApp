@@ -22,20 +22,19 @@ public enum Surface implements ISurfaceType {
         @Override
         public double setDragFactor(double dragFactor) {
             return 0.8;
-
         }
     },
     SNOW {
         @Override
         public double setDragFactor(double dragFactor) {
             return 0.25;
-
         }
     },
     ICE {
         @Override
-        public double setDragFactor(double dragFactor) {
+        public double setDragFactor( double dragFactor) {
             return 0.55;
         }
     }
+
 }

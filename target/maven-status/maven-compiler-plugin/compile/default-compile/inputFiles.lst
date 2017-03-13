@@ -1,2 +1,5 @@
-/home/brian/workspace/Screech/src/main/java/servlets/ScreechServlet.java
-/home/brian/workspace/Screech/src/main/java/beans/CarBean.java
+/home/brian/workspace/Screech/src/main/java/model/Surface.java
+/home/brian/workspace/Screech/src/main/java/model/CarBean.java
+/home/brian/workspace/Screech/src/main/java/controller/ScreechServlet.java
+/home/brian/workspace/Screech/src/main/java/model/ISurfaceType.java
+/home/brian/workspace/Screech/src/main/java/model/DragFactor.java
