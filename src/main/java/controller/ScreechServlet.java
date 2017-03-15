@@ -1,6 +1,7 @@
 package controller;
 
 import model.CarBean;
+import model.Skid;
 import model.Surface;
 
 import javax.servlet.ServletException;
@@ -12,7 +13,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 /*
     COMP8007 OO Server Side Programming
@@ -77,7 +77,7 @@ public class ScreechServlet extends HttpServlet {
 
 
 
-        List<Double> skidList = new ArrayList<>(Arrays.asList(skidLen1, skidLen2, skidLen3, skidLen4));
+        ArrayList<Double> skidList = new ArrayList<>(Arrays.asList(skidLen1, skidLen2, skidLen3, skidLen4));
 
         // checks that input is a number, and display error(s) if not
         int x = 1;
@@ -99,7 +99,11 @@ public class ScreechServlet extends HttpServlet {
         skid3 = Double.parseDouble(request.getParameter("skidmarklength3"));
         skid4 = Double.parseDouble(request.getParameter("skidmarklength4"));
 
-        List<Double> skidListCopy = new ArrayList<>(Arrays.asList(skid1, skid2, skid3, skid4));
+        ArrayList<Double> skidListCopy = new ArrayList<>(Arrays.asList(skid1, skid2, skid3, skid4));
+
+
+
+
 
         carBean = new CarBean(
                 carName, numOfSkidMarks, skid1, skid2, skid3, skid4, surfaceType);
@@ -133,21 +137,24 @@ public class ScreechServlet extends HttpServlet {
         }
 
 
-        // set variable equal to the return from the method No. 1 calculateAverageSkidDistance()
-        double avgSkidLength = calculateAverageSkidDistance(numOfSkidMarks, skid1, skid2, skid3, skid4);
+
 
         // drag factor
         double dragFactor = setDragFactor(surfaceType);
 
 
-
+        /*** Create 'Skid' object and populate it ***/
+        // then set class scoped variable equal to the objects getAverageSkidDistance()
+        Skid skid = new Skid(numOfSkidMarks, skidListCopy);
+        averageSkidLength = skid.getAverageSkidDistance();
 
 
         // breaking efficiency
-        double breakEff = calculateBreakingEfficiency(numOfSkidMarks);
+        double breakEff = calculateBreakingEfficiency(numOfSkidMarks);;
+
 
         // set variable equal to the return from the method No. 3 calculateSpeed(...)
-        double result = calculateSpeed(avgSkidLength, dragFactor, breakEff);
+        double result = calculateSpeed(averageSkidLength, dragFactor, breakEff);
 
         // create html from the method No. 4 createHTMLDoc(...)
         StringBuffer stringBuffer = createHTMLDoc(result, skid1, skid2, skid3, skid4, surfaceType);
@@ -180,10 +187,10 @@ public class ScreechServlet extends HttpServlet {
     }
 
 
-    // calculate the average skid distance
-    public double calculateAverageSkidDistance(int numberOfSkidMarks, double sk1, double sk2, double sk3, double sk4) {
-        return averageSkidLength = (sk1 + sk2 + sk3 + sk4) / numberOfSkidMarks;
-    }
+    // calculate the average skid distance - moved this into the class 'Skid'
+//    public double calculateAverageSkidDistance(int numberOfSkidMarks, double sk1, double sk2, double sk3, double sk4) {
+//        return averageSkidLength = (sk1 + sk2 + sk3 + sk4) / numberOfSkidMarks;
+//    }
 
 
     // calculate breaking efficiency based on number of skid marks

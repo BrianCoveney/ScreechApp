@@ -36,13 +36,5 @@ public class ScreechServletTest {
         assertThat(unexpectedResult, is(not(screechServlet.calculateSpeed(skidDistance1, dragFactor, breakingEfficiency))));
     }
 
-    @Test
-    public void calculateAverageSkidDistance() throws Exception {
-        assertThat(60.0, is(screechServlet.calculateAverageSkidDistance(fourSkidMarks, skidDistance1, skidDistance1, skidDistance1, skidDistance1)));
-        assertThat(50.0, is(screechServlet.calculateAverageSkidDistance(threeSkidMarks, skidDistance1, skidDistance2, skidDistance1, 0)));
-        assertThat(45.0, is(screechServlet.calculateAverageSkidDistance(twoSkidMarks, skidDistance1, skidDistance2, 0, 0)));
-        assertThat(30.0, is(screechServlet.calculateAverageSkidDistance(oneSkidMark, skidDistance2, 0, 0, 0)));
-    }
-
 
 }
