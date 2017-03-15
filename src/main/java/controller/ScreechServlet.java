@@ -1,5 +1,6 @@
 package controller;
 
+import helpers.Const;
 import model.Breaking;
 import model.CarBean;
 import model.Skid;
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Locale;
 
 /*
     COMP8007 OO Server Side Programming
@@ -152,11 +154,11 @@ public class ScreechServlet extends HttpServlet {
         Breaking breaking = new Breaking();
         breaking.getNumberSkidMarks(skid);
         breaking.setBreakingEfficiency(skid.getNumberOfSkids());
-        double breakEff = breaking.getBreakingEfficiency();
+        breakingEfficiency = breaking.getBreakingEfficiency();
 
 
         // set variable equal to the return from the method No. 3 calculateSpeed(...)
-        double result = calculateSpeed(averageSkidLength, dragFactor, breakEff);
+        double result = calculateSpeed(averageSkidLength, dragFactor, breakingEfficiency);
 
         // create html from the method No. 4 createHTMLDoc(...)
         StringBuffer stringBuffer = createHTMLDoc(result, skid1, skid2, skid3, skid4, surfaceType);
@@ -209,8 +211,11 @@ public class ScreechServlet extends HttpServlet {
         stringBuff.append("<jsp:getProperty name='CarBean' property='skidMarks'/>");
         stringBuff.append("<h3>Base on your figures, the skid details for the " + carName + " are:</h3>\n");
         stringBuff.append("<table>");
-        stringBuff.append("<tr><th>Avg skid distance</th><th>Surface type</th><th>Calculated Speed</th></tr>");
-        stringBuff.append("<tr><td>" + averageSkidLength + "feet</td><td>" + sur + "</td><td>" + res + "mph</td></tr>");
+        stringBuff.append("<tr><th>Avg skid distance</th><th>Surface type</th><th>Breaking Efficiency</th><th>Calculated Speed</th></tr>");
+        stringBuff.append("<tr><td>" + averageSkidLength + "feet</td>");
+        stringBuff.append("<td>" + sur + "</td>");
+        stringBuff.append("<td>"+ Const.displayPercent(Locale.ENGLISH, breakingEfficiency)+"</td>");
+        stringBuff.append("<td>" + res + "mph</td></tr>");
         stringBuff.append("<table>");
         stringBuff.append("</body></html>");
         return stringBuff;

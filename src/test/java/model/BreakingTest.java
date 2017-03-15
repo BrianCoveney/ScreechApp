@@ -1,5 +1,6 @@
 package model;
 
+import helpers.Const;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -30,10 +31,10 @@ public class BreakingTest {
     @Test
     public void setBreakingEfficiency() throws Exception {
 
-        assertThat(1.0, is(breaking.setBreakingEfficiency(skid1.getNumberOfSkids())));
-        assertThat(0.7, is(breaking.setBreakingEfficiency(skid2.getNumberOfSkids())));
-        assertThat(0.6, is(breaking.setBreakingEfficiency(skid3.getNumberOfSkids())));
-        assertThat(0.3, is(breaking.setBreakingEfficiency(skid4.getNumberOfSkids())));
+        assertThat(Const.ONE_HUNDRED_PERCENT, is(breaking.setBreakingEfficiency(skid1.getNumberOfSkids())));
+        assertThat(Const.SEVENTY_PERCENT, is(breaking.setBreakingEfficiency(skid2.getNumberOfSkids())));
+        assertThat(Const.SIXTY_PERCENT, is(breaking.setBreakingEfficiency(skid3.getNumberOfSkids())));
+        assertThat(Const.THIRTY_PERCENT, is(breaking.setBreakingEfficiency(skid4.getNumberOfSkids())));
 
     }
 

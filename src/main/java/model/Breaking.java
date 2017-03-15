@@ -1,5 +1,9 @@
 package model;
 
+import helpers.Const;
+
+import java.util.Locale;
+
 /**
  * Created by brian on 15/03/17.
  */
@@ -8,6 +12,7 @@ public class Breaking {
 
     private double breakingEfficiency;
     private int numberSkidMarks;
+
 
     public Breaking() { }
 
@@ -24,15 +29,23 @@ public class Breaking {
 
     public double setBreakingEfficiency(int numberSkidMarks) {
         if (numberSkidMarks == 4) {
-            breakingEfficiency = 1.0;
+            breakingEfficiency = Const.ONE_HUNDRED_PERCENT;
         } else if (numberSkidMarks == 3) {
-            breakingEfficiency = 0.7;
+            breakingEfficiency = Const.SEVENTY_PERCENT;
         } else if (numberSkidMarks == 2) {
-            breakingEfficiency = 0.6;
+            breakingEfficiency = Const.SIXTY_PERCENT;
         } else if (numberSkidMarks == 1) {
-            breakingEfficiency = 0.3;
+            breakingEfficiency = Const.THIRTY_PERCENT;
         }
         return this.breakingEfficiency;
     }
 
+    @Override
+    public String toString() {
+
+        String x = Const.displayPercent(Locale.ENGLISH, breakingEfficiency);
+
+        return x;
+
+    }
 }
