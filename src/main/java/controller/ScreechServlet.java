@@ -1,5 +1,6 @@
 package controller;
 
+import model.Breaking;
 import model.CarBean;
 import model.Skid;
 import model.Surface;
@@ -137,8 +138,6 @@ public class ScreechServlet extends HttpServlet {
         }
 
 
-
-
         // drag factor
         double dragFactor = setDragFactor(surfaceType);
 
@@ -150,7 +149,10 @@ public class ScreechServlet extends HttpServlet {
 
 
         // breaking efficiency
-        double breakEff = calculateBreakingEfficiency(numOfSkidMarks);;
+        Breaking breaking = new Breaking();
+        breaking.getNumberSkidMarks(skid);
+        breaking.setBreakingEfficiency(skid.getNumberOfSkids());
+        double breakEff = breaking.getBreakingEfficiency();
 
 
         // set variable equal to the return from the method No. 3 calculateSpeed(...)
@@ -186,26 +188,6 @@ public class ScreechServlet extends HttpServlet {
         return dragFactor;
     }
 
-
-    // calculate the average skid distance - moved this into the class 'Skid'
-//    public double calculateAverageSkidDistance(int numberOfSkidMarks, double sk1, double sk2, double sk3, double sk4) {
-//        return averageSkidLength = (sk1 + sk2 + sk3 + sk4) / numberOfSkidMarks;
-//    }
-
-
-    // calculate breaking efficiency based on number of skid marks
-    public double calculateBreakingEfficiency(int numberOfSkidMarks) {
-        if (numberOfSkidMarks == 4) {
-            breakingEfficiency = 1.0;
-        } else if (numberOfSkidMarks == 3) {
-            breakingEfficiency = 0.7;
-        } else if (numberOfSkidMarks == 2) {
-            breakingEfficiency = 0.6;
-        } else if (numberOfSkidMarks == 1) {
-            breakingEfficiency = 0.3;
-        }
-        return breakingEfficiency;
-    }
 
 
     // calculate the result, using the formula:   S = √30 * D * f * n
