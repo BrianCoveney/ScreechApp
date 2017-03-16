@@ -9,7 +9,7 @@ public class Skid {
 
     private int numberOfSkids;
     private ArrayList<Double> skidList;
-    private double averageSkidDistance;
+    private int averageSkidDistance;
 
 
     public Skid() { }
@@ -17,7 +17,7 @@ public class Skid {
     public Skid(int numberOfSkids, ArrayList<Double> skidList) {
         this.numberOfSkids = numberOfSkids;
         this.skidList = skidList;
-        setAverageSkidDistance(skidList);
+        setAverageSkidDistance();
     }
 
     public void addSkidLengths(double skidLength) {
@@ -41,13 +41,13 @@ public class Skid {
     }
 
 
-    public double getAverageSkidDistance() {
+    public int getAverageSkidDistance() {
         return this.averageSkidDistance;
     }
 
-    public void setAverageSkidDistance(ArrayList<Double> skidList) {
+    public void setAverageSkidDistance() {
 
-        double sum = 0;
+        int sum = 0;
         for(double length : skidList) {
             sum += length;
         }

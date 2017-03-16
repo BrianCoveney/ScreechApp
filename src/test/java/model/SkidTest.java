@@ -26,7 +26,7 @@ public class SkidTest {
     @Test
     public void setAverageSkidDistance() throws Exception {
 
-        assertThat(45.0, is(skid.getAverageSkidDistance()));
+        assertThat(45, is(skid.getAverageSkidDistance()));
 
     }
 

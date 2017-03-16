@@ -35,6 +35,6 @@ public enum Surface implements ISurfaceType {
         public double setDragFactor( double dragFactor) {
             return 0.55;
         }
-    }
+    };
 
 }

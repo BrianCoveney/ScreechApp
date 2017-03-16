@@ -1,10 +1,7 @@
 package controller;
 
 import helpers.Const;
-import model.Breaking;
-import model.CarBean;
-import model.Skid;
-import model.Surface;
+import model.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -46,11 +43,16 @@ public class ScreechServlet extends HttpServlet {
     private String carName;
     private double skidLen1, skidLen2, skidLen3, skidLen4, skid1, skid2, skid3, skid4;
     private int numOfSkidMarks;
-    private double averageSkidLength = 0;
-    private String surfaceType;
+    private int averageSkidLength = 0;
+    private String surfaceChoice;
     private double breakingEfficiency;
     private double dragFactor;
+    private double speed;
+    private ArrayList<Double> skidList;
+
+    private Skid skid;
     private CarBean carBean;
+    private Breaking breaking;
 
 
     public ScreechServlet() {
@@ -65,9 +67,19 @@ public class ScreechServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        // set vars equal to form parameters
+        /*** set vars equal to form parameters ***/
         carName = request.getParameter("carname");
+        skid1 = Double.parseDouble(request.getParameter("skidmarklength1"));
+        skid2 = Double.parseDouble(request.getParameter("skidmarklength2"));
+        skid3 = Double.parseDouble(request.getParameter("skidmarklength3"));
+        skid4 = Double.parseDouble(request.getParameter("skidmarklength4"));
+        surfaceChoice = request.getParameter("surface");
 
+
+
+        /*** Validation ***/
+
+        // Validate number of skid marks
         try {
             numOfSkidMarks = Integer.parseInt(request.getParameter("skidmarks"));
             request.getSession().removeAttribute("message");
@@ -78,55 +90,49 @@ public class ScreechServlet extends HttpServlet {
             request.getRequestDispatcher("/error.jsp").forward(request, response);
         }
 
-
-
-        ArrayList<Double> skidList = new ArrayList<>(Arrays.asList(skidLen1, skidLen2, skidLen3, skidLen4));
-
-        // checks that input is a number, and display error(s) if not
-        int x = 1;
-        for (Double skid : skidList) {
-            try {
-                skid = Double.parseDouble(request.getParameter("skidmarklength" + x));
-                request.getSession().removeAttribute("errorMsgSkid" + x);
-
-            } catch (NumberFormatException e) {
-                request.getSession().setAttribute("errorMsgSkid"+ x, "Must be a number!!");
-                request.getRequestDispatcher("/error.jsp").forward(request, response);
-            }
-            x++;
+        if (!(numOfSkidMarks < 1)) {
+            request.getSession().removeAttribute("message");
+        } else {
+            request.getSession().setAttribute("message", "There must be a least one skid!");
+            request.getRequestDispatcher("/error.jsp").forward(request, response);
         }
 
 
-        skid1 = Double.parseDouble(request.getParameter("skidmarklength1"));
-        skid2 = Double.parseDouble(request.getParameter("skidmarklength2"));
-        skid3 = Double.parseDouble(request.getParameter("skidmarklength3"));
-        skid4 = Double.parseDouble(request.getParameter("skidmarklength4"));
+        // Validate the skid marks
+        skidList = new ArrayList<>(Arrays.asList(skid1, skid2, skid3, skid4));
+        // checks that input is a number, and display error(s) if not
+        int i = 1;
+        for (Double skid : skidList) {
+            try {
+                skid = Double.parseDouble(request.getParameter("skidmarklength" + i));
+                request.getSession().removeAttribute("errorMsgSkid" + i);
 
-        ArrayList<Double> skidListCopy = new ArrayList<>(Arrays.asList(skid1, skid2, skid3, skid4));
+            } catch (NumberFormatException e) {
+                request.getSession().setAttribute("errorMsgSkid"+ i, "Needs to be a number!!");
+                request.getRequestDispatcher("/error.jsp").forward(request, response);
+            }
+            i++;
+        }
 
 
-
-
-
-        carBean = new CarBean(
-                carName, numOfSkidMarks, skid1, skid2, skid3, skid4, surfaceType);
+        // Create 'CarBean' object and populate it
+        carBean = new CarBean();
+        carBean.setCarName(carName);
+        carBean.setNumSkidMarks(numOfSkidMarks);
 
 
         // check that each skid length is > 0, and display error(s) if not
-        for(int i = 0; i < skidListCopy.size(); i++) {
+        for(int j = 0; j < skidList.size(); j++) {
 
-            if(carBean.isSkidMarkLengthValid(skidListCopy.get(i))) {
-                request.getSession().removeAttribute("errorMsg2Skid" + i);
+            if(carBean.isSkidMarkLengthValid(skidList.get(j))) {
+                request.getSession().removeAttribute("errorMsg2Skid" + j);
             } else {
                 // set error message
-                request.getSession().setAttribute("errorMsg2Skid" + i, "Please check your skid length entry");
+                request.getSession().setAttribute("errorMsg2Skid" + j, "Input error!");
                 // redirect to index.jsp
                 request.getRequestDispatcher("/error.jsp").forward(request, response);
             }
         }
-
-
-        surfaceType = request.getParameter("surface");
 
 
 
@@ -138,67 +144,73 @@ public class ScreechServlet extends HttpServlet {
             request.getSession().setAttribute("errorMsg", "Please check you car name entry");
             request.getRequestDispatcher("/error.jsp").forward(request, response);
         }
+        /*** end Validation ***/
 
 
-        // drag factor
-        double dragFactor = setDragFactor(surfaceType);
+
+        // calculation methods
+        skidDistance();
+
+        breakingEfficiency();
+
+        setDragFactor(surfaceChoice);
+
+        calculateSpeed(averageSkidLength, dragFactor, breakingEfficiency);
 
 
-        /*** Create 'Skid' object and populate it ***/
-        // then set class scoped variable equal to the objects getAverageSkidDistance()
-        Skid skid = new Skid(numOfSkidMarks, skidListCopy);
-        averageSkidLength = skid.getAverageSkidDistance();
-
-
-        // breaking efficiency
-        Breaking breaking = new Breaking();
-        breaking.getNumberSkidMarks(skid);
-        breaking.setBreakingEfficiency(skid.getNumberOfSkids());
-        breakingEfficiency = breaking.getBreakingEfficiency();
-
-
-        // set variable equal to the return from the method No. 3 calculateSpeed(...)
-        double result = calculateSpeed(averageSkidLength, dragFactor, breakingEfficiency);
-
-        // create html from the method No. 4 createHTMLDoc(...)
-        StringBuffer stringBuffer = createHTMLDoc(result, skid1, skid2, skid3, skid4, surfaceType);
+        // create page containing calculation results
+        StringBuffer stringBuffer = createHTMLDoc(speed, skid1, skid2, skid3, skid4, surfaceChoice);
 
         response.setContentType("text/html"); // content type
         PrintWriter printWriter = response.getWriter();
         printWriter.println(stringBuffer);
         printWriter.close();
+
+    } // end doGet()
+
+
+
+    private double skidDistance() {
+        // Create 'Skid' object and populate it
+        // then set class scoped variable equal to the objects getAverageSkidDistance()
+        skid = new Skid();
+        skid.setNumberOfSkids(carBean.getNumSkidMarks());
+        skid.setSkidList(skidList);
+        skid.setAverageSkidDistance();
+
+        // set class scoped variable equal to the returned avg skid distance
+        return averageSkidLength = skid.getAverageSkidDistance();
     }
 
 
-    // set value based on checkbox selection
-    public double setDragFactor(String choice) {
-        if (choice.equalsIgnoreCase(Surface.CEMENT.toString())){
-            dragFactor = Surface.CEMENT.setDragFactor(dragFactor);
-        }
-        else if (choice.equalsIgnoreCase(Surface.ASPHALT.toString())) {
-            dragFactor = Surface.ASPHALT.setDragFactor(dragFactor);
-        }
-        else if (choice.equalsIgnoreCase(Surface.GRAVEL.toString())) {
-            dragFactor = Surface.GRAVEL.setDragFactor(dragFactor);
-        }
-        else if (choice.equalsIgnoreCase(Surface.SNOW.toString())) {
-            dragFactor = Surface.SNOW.setDragFactor(dragFactor);
-        }
-        else if (choice.equalsIgnoreCase(Surface.ICE.toString())) {
-            dragFactor = Surface.ICE.setDragFactor(dragFactor);
-        }
+    // return braking efficiency
+    private double breakingEfficiency() {
+        // Create 'Breaking' object and populate it
+        // set breaking efficiency based on number of skid marks
+        breaking = new Breaking();
+        breaking.getNumberSkidMarks(skid);
+        breaking.setBreakingEfficiency(skid.getNumberOfSkids());
+        return breakingEfficiency = breaking.getBreakingEfficiency();
+    }
+
+
+    // set drag factor value based on users checkbox selection
+    public double setDragFactor(String surfaceChoice) {
+        SurfaceType surfaceType = new SurfaceType();
+        surfaceType.setDragFactor(surfaceChoice);
+        dragFactor = surfaceType.getDragFactor();
         return dragFactor;
     }
-
 
 
     // calculate the result, using the formula:   S = √30 * D * f * n
     public double calculateSpeed(double skidDist, double dragFact, double brakeEfficiency) {
         double product = EQUATION_CONST * skidDist * dragFact;
         double total = Math.sqrt(product);
-        double totalRounded = Math.round(total * 10) / 10.0; // to one decimal place
-        return totalRounded;
+        speed = Math.round(total * 10) / 10.0; // round to one decimal place
+        return speed;
     }
+
 
 
     // create and send HTML to the client
@@ -212,9 +224,9 @@ public class ScreechServlet extends HttpServlet {
         stringBuff.append("<h3>Base on your figures, the skid details for the " + carName + " are:</h3>\n");
         stringBuff.append("<table>");
         stringBuff.append("<tr><th>Avg skid distance</th><th>Surface type</th><th>Breaking Efficiency</th><th>Calculated Speed</th></tr>");
-        stringBuff.append("<tr><td>" + averageSkidLength + "feet</td>");
+        stringBuff.append("<tr><td>" + averageSkidLength + "'</td>");
         stringBuff.append("<td>" + sur + "</td>");
-        stringBuff.append("<td>"+ Const.displayPercent(Locale.ENGLISH, breakingEfficiency)+"</td>");
+        stringBuff.append("<td>"+ Const.displayPercent(Locale.ENGLISH, breakingEfficiency) +"</td>");
         stringBuff.append("<td>" + res + "mph</td></tr>");
         stringBuff.append("<table>");
         stringBuff.append("</body></html>");
