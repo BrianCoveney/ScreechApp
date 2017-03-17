@@ -13,12 +13,12 @@
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/stylesheet.css">
 
 </head>
+<jsp:include page="headder.jsp"></jsp:include>
 <form method="get" action="ScreechServlet" method="post">
+
+    <%--Hidden form field is used to maintain the session--%>
     <input type="hidden" name="from" value="${pageContext.request.requestURI}"/>
-    <fieldset>
-        <p class="text">Calculate speed of your car from it's skid marks</p>
-    </fieldset>
-    <fieldset>
+
     <label class="carname_lable">Name of car:</label>
         <input type="text" name="carname"><span>${errorMsg}</span><br>
         <label>Number of skid marks:</label>
@@ -50,5 +50,9 @@
         <input class="reset_btn" type="reset" name="reset" value="Reset">
     </fieldset>
 </form>
+<footer>
+    <%-- include Directive  --%>
+    <%@include file="footer.jsp"%>
+</footer>
 </body>
 </html>

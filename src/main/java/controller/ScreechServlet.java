@@ -67,15 +67,6 @@ public class ScreechServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        /*** set vars equal to form parameters ***/
-        carName = request.getParameter("carname");
-        skid1 = Double.parseDouble(request.getParameter("skidmarklength1"));
-        skid2 = Double.parseDouble(request.getParameter("skidmarklength2"));
-        skid3 = Double.parseDouble(request.getParameter("skidmarklength3"));
-        skid4 = Double.parseDouble(request.getParameter("skidmarklength4"));
-        surfaceChoice = request.getParameter("surface");
-
-
 
         /*** Validation ***/
 
@@ -113,6 +104,15 @@ public class ScreechServlet extends HttpServlet {
             }
             i++;
         }
+
+
+        /*** set vars equal to form parameters ***/
+        carName = request.getParameter("carname");
+        skid1 = Double.parseDouble(request.getParameter("skidmarklength1"));
+        skid2 = Double.parseDouble(request.getParameter("skidmarklength2"));
+        skid3 = Double.parseDouble(request.getParameter("skidmarklength3"));
+        skid4 = Double.parseDouble(request.getParameter("skidmarklength4"));
+        surfaceChoice = request.getParameter("surface");
 
 
         // Create 'CarBean' object and populate it

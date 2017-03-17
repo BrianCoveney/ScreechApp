@@ -51,7 +51,7 @@ public class CarBean {
 
 
     public boolean isSkidMarkLengthValid(Double skidLength) {
-        if (skidLength > 0) {
+        if (skidLength >= 0) {
             return true;
         }
         return false;
