@@ -49,6 +49,7 @@ public class ScreechServlet extends HttpServlet {
     private double dragFactor;
     private double speed;
     private ArrayList<Double> skidList;
+    private ArrayList<Double> skidListCopy;
 
     private Skid skid;
     private CarBean carBean;
@@ -78,21 +79,21 @@ public class ScreechServlet extends HttpServlet {
             // set error message
             request.getSession().setAttribute("message", "Must be a number!!");
             // redirect to index.jsp
-            request.getRequestDispatcher("/error.jsp").forward(request, response);
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
         }
 
         if (!(numOfSkidMarks < 1)) {
             request.getSession().removeAttribute("message");
         } else {
             request.getSession().setAttribute("message", "There must be a least one skid!");
-            request.getRequestDispatcher("/error.jsp").forward(request, response);
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
         }
 
 
         // Validate the skid marks
         skidList = new ArrayList<>(Arrays.asList(skid1, skid2, skid3, skid4));
         // checks that input is a number, and display error(s) if not
-        int i = 1;
+        int i = 0;
         for (Double skid : skidList) {
             try {
                 skid = Double.parseDouble(request.getParameter("skidmarklength" + i));
@@ -100,7 +101,7 @@ public class ScreechServlet extends HttpServlet {
 
             } catch (NumberFormatException e) {
                 request.getSession().setAttribute("errorMsgSkid"+ i, "Needs to be a number!!");
-                request.getRequestDispatcher("/error.jsp").forward(request, response);
+                request.getRequestDispatcher("/index.jsp").forward(request, response);
             }
             i++;
         }
@@ -108,11 +109,13 @@ public class ScreechServlet extends HttpServlet {
 
         /*** set vars equal to form parameters ***/
         carName = request.getParameter("carname");
-        skid1 = Double.parseDouble(request.getParameter("skidmarklength1"));
-        skid2 = Double.parseDouble(request.getParameter("skidmarklength2"));
-        skid3 = Double.parseDouble(request.getParameter("skidmarklength3"));
-        skid4 = Double.parseDouble(request.getParameter("skidmarklength4"));
+        skid1 = Double.parseDouble(request.getParameter("skidmarklength0"));
+        skid2 = Double.parseDouble(request.getParameter("skidmarklength1"));
+        skid3 = Double.parseDouble(request.getParameter("skidmarklength2"));
+        skid4 = Double.parseDouble(request.getParameter("skidmarklength3"));
         surfaceChoice = request.getParameter("surface");
+
+        skidListCopy = new ArrayList<>(Arrays.asList(skid1, skid2, skid3, skid4));
 
 
         // Create 'CarBean' object and populate it
@@ -122,15 +125,15 @@ public class ScreechServlet extends HttpServlet {
 
 
         // check that each skid length is > 0, and display error(s) if not
-        for(int j = 0; j < skidList.size(); j++) {
+        for(int j = 0; j < skidListCopy.size(); j++) {
 
-            if(carBean.isSkidMarkLengthValid(skidList.get(j))) {
+            if(carBean.isSkidMarkLengthValid(skidListCopy.get(j))) {
                 request.getSession().removeAttribute("errorMsg2Skid" + j);
             } else {
                 // set error message
                 request.getSession().setAttribute("errorMsg2Skid" + j, "Input error!");
                 // redirect to index.jsp
-                request.getRequestDispatcher("/error.jsp").forward(request, response);
+                request.getRequestDispatcher("/index.jsp").forward(request, response);
             }
         }
 
@@ -142,10 +145,12 @@ public class ScreechServlet extends HttpServlet {
             request.getSession().removeAttribute("errorMsg");
         } else {
             request.getSession().setAttribute("errorMsg", "Please check you car name entry");
-            request.getRequestDispatcher("/error.jsp").forward(request, response);
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
         }
         /*** end Validation ***/
 
+
+        System.out.println(skidListCopy);
 
 
         // calculation methods
@@ -175,8 +180,12 @@ public class ScreechServlet extends HttpServlet {
         // then set class scoped variable equal to the objects getAverageSkidDistance()
         skid = new Skid();
         skid.setNumberOfSkids(carBean.getNumSkidMarks());
-        skid.setSkidList(skidList);
+        skid.setSkidList(skidListCopy);
         skid.setAverageSkidDistance();
+
+        System.out.println("skidlist: "+skidListCopy);
+
+
 
         // set class scoped variable equal to the returned avg skid distance
         return averageSkidLength = skid.getAverageSkidDistance();
@@ -206,6 +215,11 @@ public class ScreechServlet extends HttpServlet {
     // calculate the result, using the formula:   S = √30 * D * f * n
     public double calculateSpeed(double skidDist, double dragFact, double brakeEfficiency) {
         double product = EQUATION_CONST * skidDist * dragFact;
+
+        System.out.println("skid dist: " + skidDist);
+        System.out.println("drag fact: " + dragFact);
+
+
         double total = Math.sqrt(product);
         speed = Math.round(total * 10) / 10.0; // round to one decimal place
         return speed;

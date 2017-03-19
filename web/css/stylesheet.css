@@ -1,5 +1,6 @@
 * {
     margin-bottom: 10px;
+    list-style-type: none;
 }
 
 body {
@@ -22,7 +23,7 @@ p.text{
 }
 
 .skid_lenghts, .skid_marks {
-    min-width: 150px;
+    max-width: 150px;
 }
 
 .carname_lable {
@@ -50,3 +51,9 @@ span {
 fieldset {
     max-width:700px;
 }
+
+.surface_lable {
+    margin-left: 40px;
+}
+
+
