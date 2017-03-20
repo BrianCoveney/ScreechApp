@@ -1,12 +1,18 @@
+/*
+    Author: Brian Coveney
+    Date: 24/02/2017
+
+    COMP8007 OO Server Side Programming
+    Assignment 1
+ */
+
 package model;
 
 import helpers.Const;
 
 import java.util.Locale;
 
-/**
- * Created by brian on 15/03/17.
- */
+
 public class Breaking {
 
 

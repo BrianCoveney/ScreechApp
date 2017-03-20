@@ -1,4 +1,7 @@
-
+<!--
+- Author: Brian Coveney
+- Date: 20/03/2017
+-->
 <%-- page Directives --%>
 <%@ page language="java"%>
 <%@ page import="java.text.SimpleDateFormat" %>
@@ -7,23 +10,26 @@
 
     <%-- Declarations --%>
     <%!
-        private String name = "Brian Coveney";
-        private String id = "R00105727";
-        private String college = "CIT";
+        private final String STU_NAME = "Brian Coveney";
+        private final String STU_ID = "R00105727";
+        private final String STU_COLLEGE = "CIT";
+        private final String YEAR_PETTERN = "yyy";
+        private String year;
         private Calendar cal = Calendar.getInstance();
-
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy");
-        String year = simpleDateFormat.format(cal.getTime());
+        private SimpleDateFormat simpleDateFormat;
     %>
 
     <div style="margin-left: 150px; margin-top: 50px">
 
         <%-- Expressions --%>
-        <%= college + " | " +  name + " | " + id + " | " %>
+        <%= STU_COLLEGE + " | " +  STU_NAME + " | " + STU_ID + " | " %>
+
 
         <%-- Scriptlet --%>
-        <% out.println(year);  %>
+        <%
+            simpleDateFormat = new SimpleDateFormat(YEAR_PETTERN);
+            year = simpleDateFormat.format(cal.getTime());
+            out.print(year);
+        %>
 
     </div>
-</body>
-</html>

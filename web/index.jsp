@@ -1,3 +1,7 @@
+<!--
+- Author: Brian Coveney
+- Date: 20/03/2017
+-->
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Arrays" %>
 <%@ page import="java.util.ArrayList" %>
@@ -24,6 +28,7 @@
 
 
         <%!
+            // Ensure blank form inputs (when page first loads), by setting variables equal to empty strings,
             String carName = "";
             String skid1 = "";
             String skid2 = "";
@@ -32,13 +37,17 @@
         %>
 
         <%
-            ArrayList<String> skidList = new ArrayList<>(Arrays.asList(skid1, skid2, skid3, skid4));
+            // create an ArrayList and add a fixed-sized list of the four skid marks
+            ArrayList<String> skidArrayList = new ArrayList<>(Arrays.asList(skid1, skid2, skid3, skid4));
 
-            for(int i = 0; i < 4; i++) {
+            // Iterate through the ArrayList
+            // - for each of the skid mark length parameters
+            // - if value is not null
+            // - set the list at each index, equal to the form value input
+            for(int i = 0; i < skidArrayList.size(); i++) {
                 if (request.getParameter("skidmarklength" + i) != null) {
-                    skidList.set(i, request.getParameter("skidmarklength" + i));
+                    skidArrayList.set(i, request.getParameter("skidmarklength" + i));
                 }
-
             }
 
 
@@ -63,7 +72,7 @@
                     <option value="3">3</option>
                     <option value="4">4</option>
                 </select>
-                <span>${errorMsg2}</span><span>${message}</span><br>
+                <%--<span>${errorMsg2}</span><span>${message}</span><br>--%>
             </li>
         </ul>
 
@@ -71,22 +80,29 @@
             <ul>
                 <li>
                     <label>Skidmark length no. 1:</label>
-                    <input type="text"  name="skidmarklength0" class="skid_lenghts one" value="<%= skidList.get(0) %>">
+
+                    <%--
+                        If user inputs an incorrect value, an error message is displayed.
+                        The value is persisted in the form input, so that the user can see their error.
+
+                        Value is blank on first page load.
+                     --%>
+                    <input type="text"  name="skidmarklength0" class="skid_lenghts one" value="<%= skidArrayList.get(0) %>">
                     <span>${errorMsgSkid0}</span><span>${errorMsg2Skid0}</span><br>
                 </li>
                 <li>
                     <label>Skidmark length no. 2:</label>
-                    <input type="test" name="skidmarklength1" class="skid_lenghts" value="<%= skidList.get(1) %>">
+                    <input type="test" name="skidmarklength1" class="skid_lenghts" value="<%= skidArrayList.get(1) %>">
                     <span>${errorMsgSkid1}</span><span>${errorMsg2Skid1}</span><br>
                 </li>
                 <li>
                     <label>Skidmark length no. 3:</label>
-                    <input type="text" name="skidmarklength2" class="skid_lenghts" value="<%= skidList.get(2) %>">
+                    <input type="text" name="skidmarklength2" class="skid_lenghts" value="<%= skidArrayList.get(2) %>">
                     <span>${errorMsgSkid2}</span><span>${errorMsg2Skid2}</span><br>
                 </li>
                 <li>
                     <label>Skidmark length no. 4:</label>
-                    <input type="text" name="skidmarklength3" class="skid_lenghts" value="<%= skidList.get(3) %>">
+                    <input type="text" name="skidmarklength3" class="skid_lenghts" value="<%= skidArrayList.get(3) %>">
                     <span>${errorMsgSkid3}</span><span>${errorMsg2Skid3}</span>
                 </li>
             </ul>
@@ -106,15 +122,12 @@
         <input class="submit_btn" type="submit" name="submit" value="Submit">
         <input class="reset_btn" type="reset" name="reset" value="Reset">
     </fieldset>
-
-
-
-
-
 </form>
 <footer>
+
     <%-- include Directive  --%>
-    <%@include file="footer.jsp" %>
+    <%@ include file="footer.jsp" %>
+
 </footer>
 </body>
 </html>

@@ -1,10 +1,16 @@
+/*
+    Author: Brian Coveney
+    Date: 24/02/2017
+
+    COMP8007 OO Server Side Programming
+    Assignment 1
+ */
+
 package model;
 
 import java.util.List;
 
-/**
- * Created by brian on 23/02/17.
- */
+
 public class CarBean {
 
     // class properties

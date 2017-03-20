@@ -1,8 +1,13 @@
+/*
+    Author: Brian Coveney
+    Date: 24/02/2017
+
+    COMP8007 OO Server Side Programming
+    Assignment 1
+ */
+
 package model;
 
-/**
- * Created by brian on 12/03/17.
- */
 public interface ISurfaceType {
 
     double setDragFactor(double dragFactor);
