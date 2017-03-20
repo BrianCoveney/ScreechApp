@@ -9,30 +9,66 @@
 }
 
 body {
-    background-color: cadetblue;
 }
 
+#container {
+    margin: auto;
+    padding: 20px;
+    width: 50%;
+    border: 2px solid black;
+    background-color: #EEEEEE;
+}
+
+fieldset ul {
+    display: flex;
+    align-items: baseline;
+    flex-direction: column;
+}
+
+li{
+    width: 100%;
+}
+
+.submit_container {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.submit_btn, .reset_btn {
+    width: 100px;
+}
+
+
 p.text{
-    margin-top: 25px;
-    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    font-size: 16px;
     font-weight: bold;
 }
 
-.submit_btn {
-    margin-right: 150px;
-    margin-left: 100px;
+#footer_container {
+    display: flex;
+    justify-content: center;
 }
 
-.submit_btn, .reset_btn{
-    margin-top: 30px;
-}
+
 
 .skid_lenghts, .skid_marks {
-    max-width: 150px;
+    max-width: 75px;
+}
+
+.skid_marks {
+    min-width: 75px;
+    margin-left: 30px;
 }
 
 .carname_lable {
     margin-right: 63px;
+}
+
+.carname_input {
+    width:120px;
 }
 
 .skid_lenghts {
@@ -54,11 +90,40 @@ span {
 }
 
 fieldset {
-    max-width:700px;
+    margin: auto;
+    margin-top: 10px;
 }
 
 .surface_lable {
     margin-left: 40px;
 }
+
+
+@media (max-width: 1205px) {
+    body {
+        background-color: red;
+    }
+
+    #container {
+        width: 90%;
+    }
+}
+
+
+@media (max-width: 710px) {
+    body {
+        background-color: cyan;
+
+    }
+
+    #container {
+        width: 90%;
+    }
+
+    ul {
+        display: block;
+    }
+}
+
 
 

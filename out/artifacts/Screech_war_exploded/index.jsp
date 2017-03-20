@@ -20,6 +20,7 @@
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/stylesheet.css">
 
 </head>
+<div id="container">
 <jsp:include page="headder.jsp"></jsp:include>
 <form method="get" action="ScreechServlet" method="post">
 
@@ -61,12 +62,12 @@
         <ul>
             <li>
                 <label class="carname_lable">Name of car:</label>
-                <input type="text" name="carname"
+                <input type="text" name="carname" class="carname_input"
                        value="<%= carName %>"><span>${errorMsg}</span>
             </li>
             <li>
                 <label>Number of skid marks:</label>
-                <select id="num_skids" name="skidmarks" class="skid_marks" style="margin-left: 30px; min-width: 50px;">
+                <select id="num_skids" name="skidmarks" class="skid_marks">
                     <option value="1" selected>1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
@@ -119,15 +120,18 @@
         </div>
     </fieldset>
     <fieldset>
-        <input class="submit_btn" type="submit" name="submit" value="Submit">
-        <input class="reset_btn" type="reset" name="reset" value="Reset">
+        <div  class="submit_container">
+            <input class="submit_btn" type="submit" name="submit" value="Submit">
+            <input class="reset_btn" type="reset" name="reset" value="Reset">
+        </div>
     </fieldset>
 </form>
 <footer>
-
-    <%-- include Directive  --%>
-    <%@ include file="footer.jsp" %>
-
+    <div id="footer_container">
+        <%-- include Directive  --%>
+        <%@ include file="footer.jsp" %>
+    </div>
 </footer>
+</div>
 </body>
 </html>

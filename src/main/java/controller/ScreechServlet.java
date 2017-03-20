@@ -72,9 +72,6 @@ public class ScreechServlet extends HttpServlet {
 
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-
-
     }
 
 
@@ -205,7 +202,7 @@ public class ScreechServlet extends HttpServlet {
 
 
         // create page containing calculation results
-        StringBuffer stringBuffer = createHTMLDoc(speed, skid1, skid2, skid3, skid4, surfaceChoice);
+        StringBuffer stringBuffer = createHTMLDoc();
 
         response.setContentType("text/html"); // content type
         PrintWriter printWriter = response.getWriter();
@@ -271,7 +268,7 @@ public class ScreechServlet extends HttpServlet {
 
 
     // create and send HTML to the client
-    public StringBuffer createHTMLDoc(double res, double sm1, double sm2, double sm3, double sm4, String sur) {
+    public StringBuffer createHTMLDoc() {
         StringBuffer stringBuff = new StringBuffer();
         stringBuff.append("<html><head>\n");
         stringBuff.append("<title>Screech GET Result</title>\n");
@@ -284,7 +281,7 @@ public class ScreechServlet extends HttpServlet {
         stringBuff.append("<tr><td>" + averageSkidLength + "'</td>");
         stringBuff.append("<td>" + getSurfaceCookies(cookieString) + "</td>");
         stringBuff.append("<td>"+ Const.displayPercent(Locale.ENGLISH, breakingEfficiency) +"</td>");
-        stringBuff.append("<td>" + res + "mph</td></tr>");
+        stringBuff.append("<td>" + speed + "mph</td></tr>");
         stringBuff.append("<table>");
         stringBuff.append("</body></html>");
         return stringBuff;

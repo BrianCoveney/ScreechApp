@@ -19,7 +19,7 @@
         private SimpleDateFormat simpleDateFormat;
     %>
 
-    <div style="margin-left: 150px; margin-top: 50px">
+    <div id="footer_container">
 
         <%-- Expressions --%>
         <%= STU_COLLEGE + " | " +  STU_NAME + " | " + STU_ID + " | " %>
