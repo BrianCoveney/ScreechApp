@@ -56,9 +56,11 @@ public class ScreechServlet extends HttpServlet {
     private Breaking breaking;
 
 
+
     public ScreechServlet() {
         super();
     }
+
 
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -74,50 +76,11 @@ public class ScreechServlet extends HttpServlet {
         setCookies(request, response);
 
 
+        validateNumberOfSkidMarkIsNumeric(request, response);
 
-        /*** Validation ***/
+        validateSidMark(request, response);
 
-        // Validate number of skid marks
-        try {
-            numOfSkidMarks = Integer.parseInt(request.getParameter("skidmarks"));
-            request.getSession().removeAttribute("message");
-        } catch (Exception e) {
-            // set error message
-            request.getSession().setAttribute("message", "Must be a number!!");
-            // redirect to index.jsp
-            request.getRequestDispatcher("/index.jsp").forward(request, response);
-        }
-
-        if (!(numOfSkidMarks < 1)) {
-            request.getSession().removeAttribute("message");
-        } else {
-            request.getSession().setAttribute("message", "There must be a least one skid!");
-            request.getRequestDispatcher("/index.jsp").forward(request, response);
-        }
-
-
-        // Validate the skid marks - checks that input is a number, and display error(s) if not
-        skidList = new ArrayList<>(Arrays.asList(skid1, skid2, skid3, skid4));
-
-        // Loop through the list and try to extract a Double
-        // - if successful remove the error message from the current session associated with this request
-        // - otherwise, set an error message along side the offending input
-        int i = 0; // my counter
-        for (Double skid : skidList) {
-            try {
-                skid = Double.parseDouble(request.getParameter("skidmarklength" + i));
-                request.getSession().removeAttribute("errorMsgSkid" + i);
-
-            } catch (NumberFormatException e) {
-                // set error message
-                request.getSession().setAttribute("errorMsgSkid"+ i, "Needs to be a number!!");
-                // redirect to index.jsp
-                request.getRequestDispatcher("/index.jsp").forward(request, response);
-            }
-            i++; // increment the loop
-        }
-
-
+        validateSkidMarksIsNumeric(request, response);
 
         // set vars equal to form parameters
         carName = request.getParameter("carname");
@@ -127,13 +90,8 @@ public class ScreechServlet extends HttpServlet {
         skid4 = Double.parseDouble(request.getParameter("skidmarklength3"));
         surfaceChoice = request.getParameter("surface");
 
-        // As the list was only attempting to extract a Double for validation purposes,
-        // we will remove all elements currently the list
-        skidList.clear();
-
         // We can now use this empty list to hold the above parameters
         skidList = new ArrayList<>(Arrays.asList(skid1, skid2, skid3, skid4));
-
 
         // construct object and write to database
         createCarBean();
@@ -141,31 +99,11 @@ public class ScreechServlet extends HttpServlet {
         // database method
         addCarToDatabase();
 
-
         // check that each skid length is > 0, and display error(s) if not
-        for(int j = 0; j < skidList.size(); j++) {
-
-            if(carBean.isSkidMarkLengthValid(skidList.get(j))) {
-                request.getSession().removeAttribute("errorMsg2Skid" + j);
-            } else {
-                request.getSession().setAttribute("errorMsg2Skid" + j, "Input error!");
-                request.getRequestDispatcher("/index.jsp").forward(request, response);
-            }
-        }
+        validateSkidMarkIsPositiveNumber(request, response);
 
 
-
-        /*** Validating that car name is a string ***/
-        //if car name is a string - remove the errorMessage on page load, and after user corrects input value
-        if (carBean.isCarNameValid()) {
-            request.getSession().removeAttribute("errorMsg");
-        } else {
-            request.getSession().setAttribute("errorMsg", "Please check you car name entry");
-            request.getRequestDispatcher("/index.jsp").forward(request, response);
-        }
-        /*** end Validation ***/
-
-
+        validateCarName(request, response);
 
         // calculation methods
         skidDistance();
@@ -176,7 +114,6 @@ public class ScreechServlet extends HttpServlet {
 
         calculateSpeed(averageSkidLength, dragFactor, breakingEfficiency);
 
-
         // create page containing calculation results
         StringBuffer stringBuffer = createHTMLDoc();
         response.setContentType("text/html"); // content type
@@ -185,6 +122,8 @@ public class ScreechServlet extends HttpServlet {
         printWriter.close();
 
     } // end doGet()
+
+
 
 
 
@@ -310,7 +249,6 @@ public class ScreechServlet extends HttpServlet {
     /**
      * This method set a return value if there is a match where the Cookie is constructed and the Array surfaceTypes.
      * It sets the return value, based on the surface choice selected in the checkbox.
-     * @see #setCookies(HttpServletRequest, HttpServletResponse)
      * @return surfaceTypes[i] or ""
      */
     public String getSurfaceCookies(String surface) {
@@ -322,6 +260,96 @@ public class ScreechServlet extends HttpServlet {
         return "";
     }
 
+
+
+    /**
+     * Validation methods:
+     *
+     */
+
+    public void validateSkidMarkIsPositiveNumber(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // check that each skid length is > 0, and display error(s) if not
+        for(int j = 0; j < skidList.size(); j++) {
+
+            if(carBean.isSkidMarkLengthValid(skidList.get(j))) {
+                request.getSession().removeAttribute("errorMsg2Skid" + j);
+            } else {
+                request.getSession().setAttribute("errorMsg2Skid" + j, "Input error!");
+                request.getRequestDispatcher("/index.jsp").forward(request, response);
+            }
+        }
+    }
+
+
+    public void validateSkidMarksIsNumeric(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Validate the skid marks - checks that input is a number, and display error(s) if not
+        skidList = new ArrayList<>(Arrays.asList(skid1, skid2, skid3, skid4));
+
+        // Loop through the list and try to extract a Double
+        // - if successful remove the error message from the current session associated with this request
+        // - otherwise, set an error message along side the offending input
+        int i = 0; // my counter
+        for (Double skid : skidList) {
+            try {
+                skid = Double.parseDouble(request.getParameter("skidmarklength" + i));
+                request.getSession().removeAttribute("errorMsgSkid" + i);
+
+            } catch (NumberFormatException e) {
+                // set error message
+                request.getSession().setAttribute("errorMsgSkid"+ i, "Needs to be a number!!");
+                // redirect to index.jsp
+                request.getRequestDispatcher("/index.jsp").forward(request, response);
+            }
+            i++; // increment the loop
+        }
+
+
+        // As the list was only attempting to extract a Double for validation purposes,
+        // we will remove all elements currently the list
+        skidList.clear();
+    }
+
+
+    public void validateNumberOfSkidMarkIsNumeric(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException  {
+        try {
+            numOfSkidMarks = Integer.parseInt(request.getParameter("skidmarks"));
+            request.getSession().removeAttribute("message");
+        } catch (Exception e) {
+            // set error message
+            request.getSession().setAttribute("message", "Must be a number!!");
+            // redirect to index.jsp
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
+        }
+    }
+
+
+    public void validateSidMark(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if (!(numOfSkidMarks < 1)) {
+            request.getSession().removeAttribute("message");
+        } else {
+            request.getSession().setAttribute("message", "There must be a least one skid!");
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
+        }
+    }
+
+
+    public void validateCarName(HttpServletRequest request, HttpServletResponse response)   {
+
+        try {
+            if (carBean != null) {
+                /*** Validating that car name is a string ***/
+                //if car name is a string - remove the errorMessage on page load, and after user corrects input value
+                if (carBean.isCarNameValid()) {
+                    request.getSession().removeAttribute("errorMsg");
+                } else {
+                    request.getSession().setAttribute("errorMsg", "Please check you car name entry");
+                    request.getRequestDispatcher("/index.jsp").forward(request, response);
+                }
+            }
+        }catch (Exception e) {
+            e.getMessage();
+        }
+    }
 
 
     /**
