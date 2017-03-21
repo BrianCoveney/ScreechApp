@@ -13,9 +13,9 @@
     <jsp:useBean id="ScreechBean" scope="session" class="model.CarBean"/>
     <jsp:setProperty name="ScreechBean" property="*"/>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-    <title>Screech</title>
+    <title>Screech Web Application</title>
 
-    <%-- 1/5 Implicit object:
+    <%-- Implicit object:
     'pageContext' provides access to the request object, which recives the contextPath  --%>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/stylesheet.css">
 
@@ -26,7 +26,6 @@
 
     <%--Hidden form field is used to maintain the session--%>
     <input type="hidden" name="from" value="${pageContext.request.requestURI}"/>
-
 
         <%!
             // Ensure blank form inputs (when page first loads), by setting variables equal to empty strings,

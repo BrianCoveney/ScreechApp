@@ -63,7 +63,7 @@ public class DBController {
     public void saveCar() { this.persistor.writeCars(this.carBeansList); }
 
 
-
+    // set persistor
     public void setPersistor(IPersistor persistor) { this.persistor = persistor; }
 
 }

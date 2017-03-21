@@ -1,3 +1,11 @@
+/*
+    Author: Brian Coveney
+    Date: 24/02/2017
+
+    COMP8007 OO Server Side Programming
+    Assignment 1
+ */
+
 package persistor;
 
 import controller.DBController;
@@ -9,11 +17,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-/**
- * Created by brian on 20/03/17.
- */
-public class MYSQLPersistor implements IPersistor{
 
+public class MYSQLPersistor implements IPersistor{
     /*
     * Intellij supports @link and @see in comments.
     * Keep the Ctrl key pressed and hover your mouse pointer over the link.
@@ -27,7 +32,6 @@ public class MYSQLPersistor implements IPersistor{
      * and results are returned within the context of a connection.
      */
     private Connection dbConnection;
-
 
     /**
      * AutoCloseable interface
@@ -50,7 +54,6 @@ public class MYSQLPersistor implements IPersistor{
         dbObjects = new ArrayList<>();
 
         try {
-
             String dbDriver = "com.mysql.cj.jdbc.Driver";
 
             String dbURL = "jdbc:mysql://" +
@@ -69,8 +72,6 @@ public class MYSQLPersistor implements IPersistor{
             } else {
                 System.out.println("Connection Failed!");
             }
-
-
         }catch (SQLException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -81,8 +82,8 @@ public class MYSQLPersistor implements IPersistor{
 
 
     /**
-     * This method is used to add loop through a list of the CarBean object,
-     * and performs a MySQL insert statement, which adds values to the DB table.
+     * This method is used to loop through a list of the CarBean object,
+     * then performs a MySQL insert statement, which adds values to the DB table.
      * @see DBController#saveCar() [ Method Declaration ]
      * @param cars This is the first paramter to addNum method
      * @return Nothing.

@@ -49,9 +49,7 @@ public class Breaking {
     @Override
     public String toString() {
 
-        String x = Const.displayPercent(Locale.ENGLISH, breakingEfficiency);
-
-        return x;
+        return Const.displayPercent(Locale.ENGLISH, breakingEfficiency);
 
     }
 }
