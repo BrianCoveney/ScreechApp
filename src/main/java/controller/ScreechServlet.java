@@ -1,19 +1,8 @@
 /*
     Author: Brian Coveney
     Date: 24/02/2017
-
     COMP8007 OO Server Side Programming
     Assignment 1
-
-    (Ref James O. Harris at: https://drive.google.com/file/d/0B63wvMT2tuKhZWNOa2swMHZsMlU/view)
-    The minimum skid speed formula
-    S = √30 * D * f * n
-    Where -
-    S = Speed, in miles per hour.
-    30 = A constant value used in this equation.
-    D = Skid Distance, in decimal feet and inches.
-    f = Drag factor for the road surface.
-    n = Braking efficiency as a percent.
  */
 
 package controller;
@@ -78,29 +67,11 @@ public class ScreechServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        // database connection
+        // database
         setPersistence();
 
-
-        PrintWriter output;
-
-        cookieString = request.getParameter("surface");
-        cookie = new Cookie("surface", getSurfaceCookies(cookieString));
-        cookie.setMaxAge(60);
-        response.addCookie(cookie);
-        cookies = request.getCookies();
-
-        response.setContentType( "text/html" );
-        output = response.getWriter();
-
-        if (cookies != null) {
-            for (int i = 0; i < cookies.length; i++) {
-                cookieValue = cookies[i].getValue();
-            }
-
-            String surfaceCookie = getSurfaceCookies(cookieValue);
-            output.print(surfaceCookie);
-        }
+        // cookies
+        setCookies(request, response);
 
 
 
@@ -167,6 +138,9 @@ public class ScreechServlet extends HttpServlet {
         // construct object and write to database
         createCarBean();
 
+        // database method
+        addCarToDatabase();
+
 
         // check that each skid length is > 0, and display error(s) if not
         for(int j = 0; j < skidList.size(); j++) {
@@ -213,17 +187,33 @@ public class ScreechServlet extends HttpServlet {
     } // end doGet()
 
 
+
+    /**
+     * This method calls the controller, which sets the persistence to our MYSQLPersistor object
+     * @return Nothing.
+     */
     public void setPersistence() {
         DBController.getInstance().setPersistor(new MYSQLPersistor());
     }
 
+
+    /**
+     * This method creates a CarBean object and populates it with the object's mutator methods.
+     * @return Nothing.
+     */
     public void createCarBean() {
         // Create 'CarBean' object and populate it
         carBean = new CarBean();
         carBean.setCarName(carName);
         carBean.setNumSkidMarks(numOfSkidMarks);
+    }
 
-        // use DBController to write object to the database
+
+    /**
+     * This method fires the connection to the database and writes the data.
+     * @return Nothing.
+     */
+    public void addCarToDatabase() {
         if(carBean != null) {
             DBController.getInstance().addCar(carBean);
         }
@@ -231,9 +221,12 @@ public class ScreechServlet extends HttpServlet {
     }
 
 
+    /**
+     * This method creates a Skid object and populates it.
+     * It sets the return value, equal to setAverageSkidDistance() based on the ArrayList skidList contents
+     * @return averageSkidLength
+     */
     private double skidDistance() {
-        // Create 'Skid' object and populate it
-        // then set class scoped variable equal to the objects getAverageSkidDistance()
         skid = new Skid();
         skid.setNumberOfSkids(carBean.getNumSkidMarks());
         skid.setSkidList(skidList);
@@ -244,10 +237,12 @@ public class ScreechServlet extends HttpServlet {
     }
 
 
-    // return braking efficiency
+    /**
+     * This method creates a Breaking object and populates it.
+     * It sets the return value, based on the number of skid marks.
+     * @return breakingEfficiency
+     */
     private double breakingEfficiency() {
-        // Create 'Breaking' object and populate it
-        // set breaking efficiency based on number of skid marks
         breaking = new Breaking();
         breaking.getNumberSkidMarks(skid);
         breaking.setBreakingEfficiency(skid.getNumberOfSkids());
@@ -255,7 +250,11 @@ public class ScreechServlet extends HttpServlet {
     }
 
 
-    // set drag factor value based on users checkbox selection
+    /**
+     * This method creates a SurfaceType object.
+     * It sets the return value, based on the surface choice selected in the checkbox.
+     * @return dragFactor
+     */
     public double setDragFactor(String surfaceChoice) {
         SurfaceType surfaceType = new SurfaceType();
         surfaceType.setDragFactor(surfaceChoice);
@@ -264,7 +263,12 @@ public class ScreechServlet extends HttpServlet {
     }
 
 
-    // calculate the result, using the formula:   S = √30 * D * f * n
+
+    /**
+     * This method calculates the speed of the car, using the formula:   S = √30 * D * f * n
+     * It sets the return value, based on the surface choice selected from the checkbox.
+     * @return speed
+     */
     public double calculateSpeed(double skidDist, double dragFact, double brakeEfficiency) {
         double product = EQUATION_CONST * skidDist * dragFact;
         double total = Math.sqrt(product);
@@ -273,7 +277,42 @@ public class ScreechServlet extends HttpServlet {
     }
 
 
-    // added as the cookie value, if there is a match
+    /**
+     * This method create a Cookie object, passes it parameters and sets it age.
+     * It also prints the cookie value to the screen (form may need to be submitted a few times for this to display).
+     * @see #getSurfaceCookies(String)
+     * @return Nothing
+     */
+    public void setCookies(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+        PrintWriter output;
+
+        cookieString = request.getParameter("surface");
+        cookie = new Cookie("surface", getSurfaceCookies(cookieString));
+        cookie.setMaxAge(60);
+        response.addCookie(cookie);
+        cookies = request.getCookies();
+
+        response.setContentType( "text/html" );
+        output = response.getWriter();
+
+        if (cookies != null) {
+            for (int i = 0; i < cookies.length; i++) {
+                cookieValue = cookies[i].getValue(); // set a String equal to the current array index
+            }
+
+            // use getSurfaceCookies() to see if there is a match, and print to screen if successful
+            String surfaceCookie = getSurfaceCookies(cookieValue);
+            output.print(surfaceCookie);
+        }
+    }
+
+
+    /**
+     * This method set a return value if there is a match where the Cookie is constructed and the Array surfaceTypes.
+     * It sets the return value, based on the surface choice selected in the checkbox.
+     * @see #setCookies(HttpServletRequest, HttpServletResponse)
+     * @return surfaceTypes[i] or ""
+     */
     public String getSurfaceCookies(String surface) {
         for (int i = 0; i < surfaceTypes.length; i++) {
             if(surface.equals(surfaceTypes[i])) {
@@ -285,7 +324,10 @@ public class ScreechServlet extends HttpServlet {
 
 
 
-    // create and send HTML to the client
+    /**
+     * This method create a StringBuffer object and appends HTML and java code, to display a web page
+     * @return stringBuff
+     */
     public StringBuffer createHTMLDoc() {
         StringBuffer stringBuff = new StringBuffer();
         stringBuff.append("<html><head>\n");

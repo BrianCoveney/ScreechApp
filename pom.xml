@@ -49,6 +49,7 @@
                     <compilerVersion>1.8</compilerVersion>
                 </configuration>
             </plugin>
+            <!--Generated Javadoc HTML -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
