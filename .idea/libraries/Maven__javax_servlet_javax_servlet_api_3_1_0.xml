@@ -2,12 +2,15 @@
   <library name="Maven: javax.servlet:javax.servlet-api:3.1.0">
     <CLASSES>
       <root url="jar://$MAVEN_REPOSITORY$/javax/servlet/javax.servlet-api/3.1.0/javax.servlet-api-3.1.0.jar!/" />
+      <root url="file://$USER_HOME$/Documents/java/mysql-connector-java-5.1.39" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$MAVEN_REPOSITORY$/javax/servlet/javax.servlet-api/3.1.0/javax.servlet-api-3.1.0-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
       <root url="jar://$MAVEN_REPOSITORY$/javax/servlet/javax.servlet-api/3.1.0/javax.servlet-api-3.1.0-sources.jar!/" />
+      <root url="file://$USER_HOME$/Documents/java/mysql-connector-java-5.1.39/src" />
     </SOURCES>
+    <jarDirectory url="file://$USER_HOME$/Documents/java/mysql-connector-java-5.1.39" recursive="false" />
   </library>
 </component>

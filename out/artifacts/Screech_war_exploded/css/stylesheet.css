@@ -100,9 +100,6 @@ fieldset {
 
 
 @media (max-width: 1205px) {
-    body {
-        background-color: red;
-    }
 
     #container {
         width: 90%;
@@ -110,20 +107,6 @@ fieldset {
 }
 
 
-@media (max-width: 710px) {
-    body {
-        background-color: cyan;
-
-    }
-
-    #container {
-        width: 90%;
-    }
-
-    ul {
-        display: block;
-    }
-}
 
 
 

@@ -6,6 +6,9 @@
         <element id="directory" name="classes">
           <element id="module-output" name="Screech" />
         </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: mysql:mysql-connector-java:6.0.5" />
+        </element>
       </element>
       <element id="javaee-facet-resources" facet="Screech/web/Web" />
     </root>

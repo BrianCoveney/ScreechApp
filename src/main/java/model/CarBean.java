@@ -8,23 +8,18 @@
 
 package model;
 
-import java.util.List;
-
-
 public class CarBean {
 
     // class properties
     private String carName;
     private int numSkidMarks = 0;
-    private String surfaceType;
-    private List<Double> skidmarkList;
 
-    // class variables
-    private String title = "to be changed";
+    // class variable
     private String stringRegex = "^[A-Za-z, ]++$";
 
 
-    /*** no arg constructor is required ***/
+    // A JavaBean is a public class with default (no argument) constructor.
+    // @link { http://wiki.apidesign.org/wiki/JavaBean }
     public CarBean() {
     }
 
@@ -47,6 +42,8 @@ public class CarBean {
         return numSkidMarks;
     }
 
+
+    // Validation methods
 
     public boolean isCarNameValid() {
         if (this.carName.matches(stringRegex)) {

@@ -23,6 +23,7 @@ import model.Breaking;
 import model.CarBean;
 import model.Skid;
 import model.SurfaceType;
+import persistor.MYSQLPersistor;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -76,6 +77,10 @@ public class ScreechServlet extends HttpServlet {
 
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        // database connection
+        setPersistence();
+
 
         PrintWriter output;
 
@@ -143,7 +148,7 @@ public class ScreechServlet extends HttpServlet {
 
 
 
-        /*** set vars equal to form parameters ***/
+        // set vars equal to form parameters
         carName = request.getParameter("carname");
         skid1 = Double.parseDouble(request.getParameter("skidmarklength0"));
         skid2 = Double.parseDouble(request.getParameter("skidmarklength1"));
@@ -159,11 +164,8 @@ public class ScreechServlet extends HttpServlet {
         skidList = new ArrayList<>(Arrays.asList(skid1, skid2, skid3, skid4));
 
 
-
-        // Create 'CarBean' object and populate it
-        carBean = new CarBean();
-        carBean.setCarName(carName);
-        carBean.setNumSkidMarks(numOfSkidMarks);
+        // construct object and write to database
+        createCarBean();
 
 
         // check that each skid length is > 0, and display error(s) if not
@@ -203,7 +205,6 @@ public class ScreechServlet extends HttpServlet {
 
         // create page containing calculation results
         StringBuffer stringBuffer = createHTMLDoc();
-
         response.setContentType("text/html"); // content type
         PrintWriter printWriter = response.getWriter();
         printWriter.println(stringBuffer);
@@ -211,6 +212,23 @@ public class ScreechServlet extends HttpServlet {
 
     } // end doGet()
 
+
+    public void setPersistence() {
+        DBController.getInstance().setPersistor(new MYSQLPersistor());
+    }
+
+    public void createCarBean() {
+        // Create 'CarBean' object and populate it
+        carBean = new CarBean();
+        carBean.setCarName(carName);
+        carBean.setNumSkidMarks(numOfSkidMarks);
+
+        // use DBController to write object to the database
+        if(carBean != null) {
+            DBController.getInstance().addCar(carBean);
+        }
+        DBController.getInstance().saveCar();
+    }
 
 
     private double skidDistance() {
@@ -255,6 +273,7 @@ public class ScreechServlet extends HttpServlet {
     }
 
 
+    // added as the cookie value, if there is a match
     public String getSurfaceCookies(String surface) {
         for (int i = 0; i < surfaceTypes.length; i++) {
             if(surface.equals(surfaceTypes[i])) {
@@ -266,12 +285,11 @@ public class ScreechServlet extends HttpServlet {
 
 
 
-
     // create and send HTML to the client
     public StringBuffer createHTMLDoc() {
         StringBuffer stringBuff = new StringBuffer();
         stringBuff.append("<html><head>\n");
-        stringBuff.append("<title>Screech GET Result</title>\n");
+        stringBuff.append("<title>Screech Web Application</title>\n");
         stringBuff.append("<style> table, th, td { border: 1px solid black; border-collapse: collapse; } th, tr,td { padding: 10px; }</style>");
         stringBuff.append("</head><body>\n");
         stringBuff.append("<jsp:getProperty name='CarBean' property='skidMarks'/>");

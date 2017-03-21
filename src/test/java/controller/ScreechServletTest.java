@@ -12,6 +12,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 public class ScreechServletTest {
 
+
     private ScreechServlet screechServlet;
     private double skidDistance1 = 60.0;
     private double skidDistance2 = 30.0;
@@ -23,6 +24,8 @@ public class ScreechServletTest {
     private int threeSkidMarks = 3;
     private int twoSkidMarks = 2;
     private int oneSkidMark = 1;
+    private String surfaceTypes[] = {"Cement", "Asphalt", "Gravel", "Ice", "Snow"};
+
 
 
     @Before
@@ -32,8 +35,11 @@ public class ScreechServletTest {
 
     @Test
     public void calculateSpeed() throws Exception {
-        assertThat(expectedResult,is(screechServlet.calculateSpeed(skidDistance1, dragFactor, breakingEfficiency)));
-        assertThat(unexpectedResult, is(not(screechServlet.calculateSpeed(skidDistance1, dragFactor, breakingEfficiency))));
+        assertThat(expectedResult,
+                is(screechServlet.calculateSpeed(skidDistance1, dragFactor, breakingEfficiency)));
+
+        assertThat(unexpectedResult,
+                is(not(screechServlet.calculateSpeed(skidDistance1, dragFactor, breakingEfficiency))));
     }
 
 
